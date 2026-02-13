@@ -3,14 +3,15 @@ name: Deploy to EC2
 on:
   push:
     branches:
-      - "**"
+      - main
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout Repository
+        uses: actions/checkout@v3
 
       - name: Deploy to EC2
         uses: appleboy/ssh-action@master
@@ -19,7 +20,20 @@ jobs:
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
+            set -e
+
+            cd /home/ubuntu
+
+            if [ ! -d "test-node-app" ]; then
+              git clone https://github.com/${{ github.repository }}.git test-node-app
+            fi
+
+            cd test-node-app
+
+            git pull origin main
+
             docker stop app || true
             docker rm app || true
+
             docker build -t app .
             docker run -d -p 80:3000 --name app app
