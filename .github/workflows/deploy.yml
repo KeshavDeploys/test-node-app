@@ -1,7 +1,9 @@
 name: Deploy to EC2
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - main
 
 jobs:
   deploy:
@@ -22,12 +24,11 @@ jobs:
 
             cd /home/ubuntu
 
-            if [ ! -d "c1d3065a-2c56-4baa-aec5-a6afa4c4f210" ]; then
-              git clone https://github.com/${{ github.repository }}.git
+            if [ ! -d "app" ]; then
+              git clone https://github.com/${{ github.repository }}.git app
             fi
 
-            cd $(basename $(git rev-parse --show-toplevel) 2>/dev/null || echo "c1d3065a-2c56-4baa-aec5-a6afa4c4f210")
-
+            cd app
             git pull origin main
 
             docker stop app || true
