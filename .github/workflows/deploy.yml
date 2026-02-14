@@ -22,11 +22,11 @@ jobs:
 
             cd /home/ubuntu
 
-            if [ ! -d "d49da85d-5c00-44e5-82a9-7b82239736a6" ]; then
+            if [ ! -d "b86b6270-37f3-41cd-acb3-f213f3750249" ]; then
               git clone https://github.com/${{ github.repository }}.git
             fi
 
-            cd $(basename $(git rev-parse --show-toplevel) 2>/dev/null || echo "d49da85d-5c00-44e5-82a9-7b82239736a6")
+            cd $(basename $(git rev-parse --show-toplevel) 2>/dev/null || echo "b86b6270-37f3-41cd-acb3-f213f3750249")
 
             git pull origin main
 
